@@ -32,11 +32,11 @@ with check (auth.uid() = id);
 --    (le même email doit aussi être mis dans index.html, variable ADMIN_EMAIL)
 create policy "admin voit toutes les societes"
 on gbs_companies for select
-using (auth.jwt() ->> 'email' = 'TON_EMAIL_ADMIN@exemple.com');
+using (auth.jwt() ->> 'email' = 'missnyunge@gmail.com');
 
 create policy "admin modifie toutes les societes"
 on gbs_companies for update
-using (auth.jwt() ->> 'email' = 'TON_EMAIL_ADMIN@exemple.com');
+using (auth.jwt() ->> 'email' = 'missnyunge@gmail.com');
 
 -- ============================================================
 -- FIN — après avoir exécuté ce script, remplace aussi
