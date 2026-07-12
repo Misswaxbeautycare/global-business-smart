@@ -85,6 +85,10 @@ button{font-family:'Outfit',sans-serif;cursor:pointer;}
 .pwrap input{padding-right:42px;}
 .peye{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);font-size:16px;padding:4px;cursor:pointer;}
 .peye:hover{color:var(--lime2);}
+.mdp-force{font-size:12.5px;font-weight:700;margin-top:6px;min-height:16px;}
+.mdp-force.rouge{color:var(--danger);}
+.mdp-force.orange{color:var(--warn);}
+.mdp-force.vert{color:var(--ok);}
 .aerr{font-size:13px;color:var(--danger);margin-top:6px;display:none;}
 .aplan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
 .aplan-opt{border:1px solid var(--border2);border-radius:9px;padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;color:var(--text2);}
@@ -197,7 +201,8 @@ tr:hover td{background:var(--surface2);}
     <div class="nav-links">
       <button class="btn btn-ghost btn-sm" onclick="partagerApp()">Partager</button>
       <button class="btn btn-ghost btn-sm" onclick="voirDemo()">Voir la démo</button>
-      <button class="btn btn-lime btn-sm" onclick="ouvrirAcces()">Accéder à mon espace</button>
+      <button class="btn btn-ghost btn-sm" onclick="ouvrirConnexion()">Se connecter</button>
+      <button class="btn btn-lime btn-sm" onclick="ouvrirCreationCompte()">Créer un compte</button>
     </div>
   </nav>
 
@@ -206,14 +211,16 @@ tr:hover td{background:var(--surface2);}
     <h1>La gestion de votre société, <em>reliée</em> et sous contrôle.</h1>
     <p>Un espace privé pour chaque société : ventes, clients, équipe et facturation, accessibles en ligne, à jour en temps réel.</p>
     <div class="hero-cta">
-      <button class="btn btn-lime" onclick="ouvrirAcces()">Démarrer maintenant</button>
+      <button class="btn btn-lime" onclick="ouvrirCreationCompte()">Créer un compte gratuitement</button>
       <button class="btn btn-ghost" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Voir les tarifs</button>
     </div>
-    <div style="margin-top:22px">
+    <div style="margin-top:14px;font-size:13px;color:var(--text2)">Essai gratuit de 7 jours · Aucune carte bancaire requise pour commencer</div>
+    <div style="margin-top:16px">
       <a onclick="toggleInstallHelp()" style="color:var(--lime2);font-size:13.5px;font-weight:700;cursor:pointer;text-decoration:underline">Comment installer l'application sur mon téléphone ?</a>
       <div id="install-help" style="display:none;margin-top:14px;max-width:560px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;font-size:13.5px;color:var(--text2);line-height:1.7">
         <strong style="color:var(--text)">Sur Android (Chrome) :</strong> ouvrez ce site, puis appuyez sur le bouton "Installer l'application" qui clignote en bas de l'écran. S'il n'apparaît pas, ouvrez le menu ⋮ de Chrome puis "Installer l'application".<br><br>
-        <strong style="color:var(--text)">Sur iPhone (Safari) :</strong> ouvrez ce site dans Safari, appuyez sur le bouton Partager (carré avec flèche vers le haut), puis choisissez "Sur l'écran d'accueil".
+        <strong style="color:var(--text)">Sur iPhone (Safari) :</strong> ouvrez ce site dans Safari, appuyez sur le bouton Partager (carré avec flèche vers le haut), puis choisissez "Sur l'écran d'accueil".<br><br>
+        <strong style="color:var(--text)">Conseil :</strong> créez d'abord votre compte dans le navigateur, installez l'application ensuite — vos données restent les mêmes, l'installation ne fait qu'ajouter une icône pratique sur votre téléphone.
       </div>
     </div>
   </section>
@@ -234,7 +241,7 @@ tr:hover td{background:var(--surface2);}
           <li><span class="chk">✓</span> Ventes, clients, factures</li>
           <li><span class="chk">✓</span> Support par email</li>
         </ul>
-        <button class="btn btn-ghost btn-block" onclick="ouvrirAcces('1')">Choisir Solo</button>
+        <button class="btn btn-ghost btn-block" onclick="ouvrirCreationCompte('1')">Choisir Solo</button>
       </div>
       <div class="pcard on">
         <div class="badge">Le plus choisi</div>
@@ -246,7 +253,7 @@ tr:hover td{background:var(--surface2);}
           <li><span class="chk">✓</span> 2 comptes utilisateurs</li>
           <li><span class="chk">✓</span> Gestion des présences & salaires</li>
         </ul>
-        <button class="btn btn-lime btn-block" onclick="ouvrirAcces('2')">Choisir Équipe</button>
+        <button class="btn btn-lime btn-block" onclick="ouvrirCreationCompte('2')">Choisir Équipe</button>
       </div>
       <div class="pcard">
         <div class="tier">Business</div>
@@ -257,7 +264,7 @@ tr:hover td{background:var(--surface2);}
           <li><span class="chk">✓</span> 5 comptes utilisateurs</li>
           <li><span class="chk">✓</span> Support prioritaire</li>
         </ul>
-        <button class="btn btn-ghost btn-block" onclick="ouvrirAcces('5')">Choisir Business</button>
+        <button class="btn btn-ghost btn-block" onclick="ouvrirCreationCompte('5')">Choisir Business</button>
       </div>
     </div>
   </section>
@@ -265,30 +272,40 @@ tr:hover td{background:var(--surface2);}
   <div class="footer-admin">Global Business Smart · <a onclick="ouvrirAdmin()">Espace Admin</a></div>
 </div>
 
-<!-- ===================== MODALE ACCÈS (sans mot de passe) ===================== -->
-<div class="ov" id="acces-modal">
+<!-- ===================== MODALE CONNEXION ===================== -->
+<div class="ov" id="connexion-modal">
   <div class="amo">
-    <button class="close" onclick="fermerAcces()">×</button>
-    <h3 id="acces-titre">Accéder à mon espace</h3>
-    <div class="amo-sub" id="acces-sous-titre">Entrez l'email de votre société pour continuer.</div>
+    <button class="close" onclick="document.getElementById('connexion-modal').classList.remove('on')">×</button>
+    <h3>Se connecter</h3>
+    <div class="amo-sub">Entrez l'email et le mot de passe de votre société.</div>
 
-    <div class="afield"><label>Email de la société</label><input type="email" id="ac-email" placeholder="vous@societe.com" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
-    <div class="afield" id="ac-pass-wrap" style="display:none"><label>Mot de passe</label><div class="pwrap"><input type="password" id="ac-pass" placeholder="Votre mot de passe"><button type="button" class="peye" onclick="togglePass('ac-pass',this)">👁</button></div></div>
-    <div class="aerr" id="ac-err"></div>
-    <button class="btn btn-lime btn-block" id="ac-continuer-btn" onclick="continuerAcces()">Continuer</button>
+    <div class="afield"><label>Email de la société</label><input type="email" id="co-email" placeholder="vous@societe.com" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+    <div class="afield"><label>Mot de passe</label><div class="pwrap"><input type="password" id="co-pass" placeholder="Votre mot de passe"><button type="button" class="peye" onclick="togglePass('co-pass',this)">👁</button></div></div>
+    <div class="aerr" id="co-err"></div>
+    <button class="btn btn-lime btn-block" onclick="connexionDirecte()">Se connecter</button>
+    <div style="font-size:13px;color:var(--text2);margin-top:16px;text-align:center">Pas encore de compte ? <a onclick="fermerConnexion();ouvrirCreationCompte()" style="color:var(--lime2);cursor:pointer;text-decoration:underline">Créer un compte</a></div>
+  </div>
+</div>
 
-    <div id="ac-nouveau" style="display:none;margin-top:16px">
-      <div class="afield"><label>Nom de la société</label><input type="text" id="ac-societe" placeholder="Ex: Ma Société SRL"></div>
-      <div class="afield"><label>Créer un mot de passe</label><div class="pwrap"><input type="password" id="ac-pass-nouveau" placeholder="Votre mot de passe"><button type="button" class="peye" onclick="togglePass('ac-pass-nouveau',this)">👁</button></div></div>
-      <label style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px">Formule</label>
-      <div class="aplan">
-        <div class="aplan-opt on" data-plan="1" onclick="choisirPlan('1',this)">1 pers.<b>75€</b></div>
-        <div class="aplan-opt" data-plan="2" onclick="choisirPlan('2',this)">2 pers.<b>125€</b></div>
-        <div class="aplan-opt" data-plan="5" onclick="choisirPlan('5',this)">5 pers.<b>210€</b></div>
-      </div>
-      <button class="btn btn-lime btn-block" onclick="creerEspace()">Créer mon espace</button>
-      <div style="font-size:12.5px;color:var(--text3);margin-top:12px;text-align:center">Un essai gratuit de 7 jours démarre automatiquement.</div>
+<!-- ===================== MODALE CRÉATION DE COMPTE ===================== -->
+<div class="ov" id="creation-modal">
+  <div class="amo">
+    <button class="close" onclick="document.getElementById('creation-modal').classList.remove('on')">×</button>
+    <h3>Créer un compte</h3>
+    <div class="amo-sub">Un essai gratuit de 7 jours démarre automatiquement.</div>
+
+    <div class="afield"><label>Nom de la société</label><input type="text" id="cr-societe" placeholder="Ex: Ma Société SRL"></div>
+    <div class="afield"><label>Email de la société</label><input type="email" id="cr-email" placeholder="vous@societe.com" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+    <div class="afield"><label>Créer un mot de passe</label><div class="pwrap"><input type="password" id="cr-pass" placeholder="Votre mot de passe" oninput="majForceMdp('cr-pass','cr-pass-force')"><button type="button" class="peye" onclick="togglePass('cr-pass',this)">👁</button></div><div class="mdp-force" id="cr-pass-force"></div></div>
+    <label style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px">Formule</label>
+    <div class="aplan">
+      <div class="aplan-opt on" data-plan="1" onclick="choisirPlan('1',this)">1 pers.<b>75€</b></div>
+      <div class="aplan-opt" data-plan="2" onclick="choisirPlan('2',this)">2 pers.<b>125€</b></div>
+      <div class="aplan-opt" data-plan="5" onclick="choisirPlan('5',this)">5 pers.<b>210€</b></div>
     </div>
+    <div class="aerr" id="cr-err"></div>
+    <button class="btn btn-lime btn-block" onclick="creerEspace()">Créer mon compte</button>
+    <div style="font-size:13px;color:var(--text2);margin-top:16px;text-align:center">Déjà un compte ? <a onclick="fermerCreation();ouvrirConnexion()" style="color:var(--lime2);cursor:pointer;text-decoration:underline">Se connecter</a></div>
   </div>
 </div>
 
@@ -578,7 +595,7 @@ tr:hover td{background:var(--surface2);}
         <div class="card">
           <h3>Mot de passe</h3>
           <div class="sub" id="pa-mdp-statut" style="margin-bottom:14px"></div>
-          <div class="afield"><label>Nouveau mot de passe</label><div class="pwrap"><input type="password" id="pa-mdp" placeholder="Votre mot de passe"><button type="button" class="peye" onclick="togglePass('pa-mdp',this)">👁</button></div></div>
+          <div class="afield"><label>Nouveau mot de passe</label><div class="pwrap"><input type="password" id="pa-mdp" placeholder="Votre mot de passe" oninput="majForceMdp('pa-mdp','pa-mdp-force')"><button type="button" class="peye" onclick="togglePass('pa-mdp',this)">👁</button></div><div class="mdp-force" id="pa-mdp-force"></div></div>
           <button class="btn btn-lime btn-sm" onclick="sauverMotDePasse()">Enregistrer le mot de passe</button>
         </div>
       </div>
@@ -893,87 +910,92 @@ async function partagerApp(){
 }
 
 /* ===== MODALE ACCÈS ===== */
-var companyEnAttenteMdp = null;
-
 function togglePass(id, btn){
   var el = document.getElementById(id);
   if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
   else { el.type = 'password'; btn.textContent = '👁'; }
 }
 
-function ouvrirAcces(plan){
-  document.getElementById('acces-modal').classList.add('on');
-  document.getElementById('ac-nouveau').style.display='none';
-  document.getElementById('ac-continuer-btn').style.display='flex';
-  document.getElementById('ac-email').value='';
-  document.getElementById('ac-email').disabled=false;
-  document.getElementById('ac-pass-wrap').style.display='none';
-  document.getElementById('ac-pass').value='';
-  document.getElementById('ac-pass-nouveau').value='';
-  document.getElementById('ac-err').style.display='none';
-  document.getElementById('acces-sous-titre').textContent = 'Entrez l\'email de votre société pour continuer.';
-  companyEnAttenteMdp = null;
-  if(plan){ planChoisi = plan; }
+function evaluerForceMdp(pass){
+  if(!pass) return {niveau:'', texte:''};
+  if(pass.length < 8) return {niveau:'rouge', texte:'Trop court — 8 caractères minimum'};
+  var varietes = 0;
+  if(/[a-z]/.test(pass)) varietes++;
+  if(/[A-Z]/.test(pass)) varietes++;
+  if(/[0-9]/.test(pass)) varietes++;
+  if(/[^A-Za-z0-9]/.test(pass)) varietes++;
+  if(pass.length>=10 && varietes>=3) return {niveau:'vert', texte:'Mot de passe fort'};
+  if(varietes>=2) return {niveau:'orange', texte:'Mot de passe moyen — ajoutez majuscules, chiffres ou symboles pour le renforcer'};
+  return {niveau:'rouge', texte:'Mot de passe faible — mélangez lettres, chiffres et majuscules'};
 }
-function fermerAcces(){ document.getElementById('acces-modal').classList.remove('on'); }
+function majForceMdp(inputId, indicateurId){
+  var pass = document.getElementById(inputId).value;
+  var r = evaluerForceMdp(pass);
+  var el = document.getElementById(indicateurId);
+  el.textContent = r.texte;
+  el.className = 'mdp-force '+r.niveau;
+}
+
+function ouvrirConnexion(){
+  document.getElementById('connexion-modal').classList.add('on');
+  document.getElementById('co-email').value='';
+  document.getElementById('co-pass').value='';
+  document.getElementById('co-err').style.display='none';
+}
+function fermerConnexion(){ document.getElementById('connexion-modal').classList.remove('on'); }
+
+function ouvrirCreationCompte(plan){
+  document.getElementById('creation-modal').classList.add('on');
+  document.getElementById('cr-societe').value='';
+  document.getElementById('cr-email').value='';
+  document.getElementById('cr-pass').value='';
+  document.getElementById('cr-pass-force').textContent=''; document.getElementById('cr-pass-force').className='mdp-force';
+  document.getElementById('cr-err').style.display='none';
+  document.querySelectorAll('#creation-modal .aplan-opt').forEach(function(o){ o.classList.toggle('on', o.dataset.plan===(plan||'1')); });
+  planChoisi = plan || '1';
+}
+function fermerCreation(){ document.getElementById('creation-modal').classList.remove('on'); }
+
 function choisirPlan(p, el){
   planChoisi = p;
   document.querySelectorAll('.aplan-opt').forEach(function(o){ o.classList.remove('on'); });
   el.classList.add('on');
 }
 
-async function continuerAcces(){
-  var errEl = document.getElementById('ac-err');
+async function connexionDirecte(){
+  var errEl = document.getElementById('co-err');
   errEl.style.display='none';
-
-  if(companyEnAttenteMdp){
-    var pass = document.getElementById('ac-pass').value;
-    if(!pass){ errEl.textContent='Entrez votre mot de passe.'; errEl.style.display='block'; return; }
-    if(pass !== companyEnAttenteMdp.mot_passe){ errEl.textContent='Mot de passe incorrect.'; errEl.style.display='block'; return; }
-    localStorage.setItem('gbs_company_id', companyEnAttenteMdp.id);
-    var c = companyEnAttenteMdp; companyEnAttenteMdp = null;
-    fermerAcces();
-    entrerDansEspace(c);
-    return;
-  }
-
-  var email = document.getElementById('ac-email').value.trim().toLowerCase();
-  if(!email){ errEl.textContent='Entrez un email.'; errEl.style.display='block'; return; }
+  var email = document.getElementById('co-email').value.trim().toLowerCase();
+  var pass = document.getElementById('co-pass').value;
+  if(!email || !pass){ errEl.textContent='Entrez votre email et votre mot de passe.'; errEl.style.display='block'; return; }
   var r = await sb.from('gbs_companies').select('*').eq('email', email).maybeSingle();
   if(r.error){ errEl.textContent='Erreur : '+r.error.message; errEl.style.display='block'; return; }
-  if(r.data){
-    var comp = r.data;
-    if(comp.mot_passe){
-      companyEnAttenteMdp = comp;
-      document.getElementById('ac-pass-wrap').style.display='block';
-      document.getElementById('acces-sous-titre').textContent = 'Entrez votre mot de passe pour continuer.';
-      document.getElementById('ac-email').disabled = true;
-    } else {
-      localStorage.setItem('gbs_company_id', comp.id);
-      fermerAcces();
-      entrerDansEspace(comp);
-      setTimeout(function(){ alert('Pensez à créer un mot de passe dans Paramètres pour sécuriser votre espace.'); }, 500);
-    }
-  } else {
-    document.getElementById('ac-nouveau').style.display='block';
-    document.getElementById('ac-continuer-btn').style.display='none';
-  }
+  if(!r.data){ errEl.textContent='Aucun compte trouvé avec cet email. Créez-en un d\'abord.'; errEl.style.display='block'; return; }
+  if(r.data.mot_passe && pass !== r.data.mot_passe){ errEl.textContent='Mot de passe incorrect.'; errEl.style.display='block'; return; }
+  localStorage.setItem('gbs_company_id', r.data.id);
+  fermerConnexion();
+  entrerDansEspace(r.data);
+  if(!r.data.mot_passe){ setTimeout(function(){ alert('Pensez à créer un mot de passe dans Paramètres pour sécuriser votre espace.'); }, 500); }
 }
 
 async function creerEspace(){
-  var email = document.getElementById('ac-email').value.trim().toLowerCase();
-  var societe = document.getElementById('ac-societe').value.trim();
-  var pass = document.getElementById('ac-pass-nouveau').value;
-  var errEl = document.getElementById('ac-err');
+  var email = document.getElementById('cr-email').value.trim().toLowerCase();
+  var societe = document.getElementById('cr-societe').value.trim();
+  var pass = document.getElementById('cr-pass').value;
+  var errEl = document.getElementById('cr-err');
   errEl.style.display='none';
   if(!societe){ errEl.textContent='Le nom de la société est requis.'; errEl.style.display='block'; return; }
+  if(!email){ errEl.textContent='L\'email est requis.'; errEl.style.display='block'; return; }
   if(!pass){ errEl.textContent='Créez un mot de passe.'; errEl.style.display='block'; return; }
+  if(pass.length < 8){ errEl.textContent='Le mot de passe doit contenir au moins 8 caractères.'; errEl.style.display='block'; return; }
+  var existant = await sb.from('gbs_companies').select('id').eq('email', email).maybeSingle();
+  if(existant.data){ errEl.textContent='Un compte existe déjà avec cet email. Connectez-vous plutôt.'; errEl.style.display='block'; return; }
   var id = 'c_'+Date.now().toString(36)+Math.random().toString(36).substr(2,7);
   var nouveau = {id:id, nom_societe:societe, email:email, mot_passe:pass, plan:planChoisi, statut_abonnement:'essai', date_creation:new Date().toISOString()};
   var r = await sb.from('gbs_companies').insert(nouveau);
   if(r.error){ errEl.textContent='Erreur : '+r.error.message; errEl.style.display='block'; return; }
   localStorage.setItem('gbs_company_id', id);
-  fermerAcces();
+  fermerCreation();
   entrerDansEspace(nouveau);
 }
 
@@ -1088,6 +1110,7 @@ async function sauverParametres(){
 async function sauverMotDePasse(){
   var pass = document.getElementById('pa-mdp').value;
   if(!pass){ alert('Entrez un mot de passe.'); return; }
+  if(pass.length < 8){ alert('Le mot de passe doit contenir au moins 8 caractères.'); return; }
   if(modeDemo){ alert('Mode démo : le mot de passe n\'est pas enregistré.'); return; }
   var r = await sb.from('gbs_companies').update({mot_passe:pass}).eq('id', currentCompany.id);
   if(r.error){ alert('Erreur : '+r.error.message); return; }
